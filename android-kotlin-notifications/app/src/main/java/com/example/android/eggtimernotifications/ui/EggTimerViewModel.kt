@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
- 
+
 package com.example.android.eggtimernotifications.ui
 
 import android.app.*
@@ -27,7 +27,6 @@ import androidx.lifecycle.*
 import com.example.android.eggtimernotifications.receiver.AlarmReceiver
 import com.example.android.eggtimernotifications.R
 import com.example.android.eggtimernotifications.util.cancelNotifications
-import com.example.android.eggtimernotifications.util.sendNotification
 import kotlinx.coroutines.*
 
 class EggTimerViewModel(private val app: Application) : AndroidViewModel(app) {
@@ -43,7 +42,7 @@ class EggTimerViewModel(private val app: Application) : AndroidViewModel(app) {
 
     private val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     private var prefs =
-        app.getSharedPreferences("com.example.android.eggtimernotifications", Context.MODE_PRIVATE)
+            app.getSharedPreferences("com.example.android.eggtimernotifications", Context.MODE_PRIVATE)
     private val notifyIntent = Intent(app, AlarmReceiver::class.java)
 
     private val _timeSelection = MutableLiveData<Int>()
@@ -63,17 +62,17 @@ class EggTimerViewModel(private val app: Application) : AndroidViewModel(app) {
 
     init {
         _alarmOn.value = PendingIntent.getBroadcast(
-            getApplication(),
-            REQUEST_CODE,
-            notifyIntent,
-            PendingIntent.FLAG_NO_CREATE
+                getApplication(),
+                REQUEST_CODE,
+                notifyIntent,
+                PendingIntent.FLAG_NO_CREATE
         ) != null
 
         notifyPendingIntent = PendingIntent.getBroadcast(
-            getApplication(),
-            REQUEST_CODE,
-            notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+                getApplication(),
+                REQUEST_CODE,
+                notifyIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         timerLengthOptions = app.resources.getIntArray(R.array.minutes_array)
@@ -115,23 +114,22 @@ class EggTimerViewModel(private val app: Application) : AndroidViewModel(app) {
                 _alarmOn.value = true
                 val selectedInterval = when (timerLengthSelection) {
                     0 -> second * 10 //For testing only
-                    else ->timerLengthOptions[timerLengthSelection] * minute
+                    else -> timerLengthOptions[timerLengthSelection] * minute
                 }
                 val triggerTime = SystemClock.elapsedRealtime() + selectedInterval
 
-                // TODO: Step 1.15 call cancel notification
                 val notificationManager =
-                    ContextCompat.getSystemService(
-                        app,
-                        NotificationManager::class.java
-                    ) as NotificationManager
+                        ContextCompat.getSystemService(
+                                app,
+                                NotificationManager::class.java
+                        ) as NotificationManager
                 notificationManager.cancelNotifications()
 
                 AlarmManagerCompat.setExactAndAllowWhileIdle(
-                    alarmManager,
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    triggerTime,
-                    notifyPendingIntent
+                        alarmManager,
+                        AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                        triggerTime,
+                        notifyPendingIntent
                 )
 
                 viewModelScope.launch {
@@ -182,12 +180,12 @@ class EggTimerViewModel(private val app: Application) : AndroidViewModel(app) {
     }
 
     private suspend fun saveTime(triggerTime: Long) =
-        withContext(Dispatchers.IO) {
-            prefs.edit().putLong(TRIGGER_TIME, triggerTime).apply()
-        }
+            withContext(Dispatchers.IO) {
+                prefs.edit().putLong(TRIGGER_TIME, triggerTime).apply()
+            }
 
     private suspend fun loadTime(): Long =
-        withContext(Dispatchers.IO) {
-            prefs.getLong(TRIGGER_TIME, 0)
-        }
+            withContext(Dispatchers.IO) {
+                prefs.getLong(TRIGGER_TIME, 0)
+            }
 }
