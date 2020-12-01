@@ -159,14 +159,15 @@ class MainActivity : AppCompatActivity() {
         val mover = ObjectAnimator.ofFloat(newStar, View.TRANSLATION_Y, -starH, containerH + starH)
         mover.interpolator = AccelerateInterpolator(1f)
 
-        val rotator = ObjectAnimator.ofFloat(newStar, View.ROTATION, (Math.random() * 1080).toFloat())
+        val rotator =
+            ObjectAnimator.ofFloat(newStar, View.ROTATION, (Math.random() * 1080).toFloat())
         rotator.interpolator = LinearInterpolator()
 
         val animatorSet = AnimatorSet()
         animatorSet.apply {
             playTogether(mover, rotator)
             duration = (Math.random() * 1500 + 500).toLong()
-            addListener(object: AnimatorListenerAdapter() {
+            addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator?) {
                     container.removeView(newStar)
                 }
