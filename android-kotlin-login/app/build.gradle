@@ -29,6 +29,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -44,6 +45,8 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+
+//    multiDexEnabled true
 
     dataBinding {
         enabled = true
@@ -67,6 +70,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.1.1')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.firebaseui:firebase-ui-auth:6.2.1'
+    implementation 'com.android.support:multidex:1.0.3'
 
     testImplementation 'junit:junit:4.13.1'
 }
